@@ -1,6 +1,6 @@
 # Service Scheduler
 
-This Go implementation represents a service scheduler designed for an in-person customer service center. The implementation utilizes Cobra, a Go framework, to generate a Command-Line Interface (CLI) for customers to interact with the service scheduler. This idea was implemented to better smiulate a real-world scernario where customers would have the ability to enter the necessary information (First name, last name and phones) themselves. If one wishes to use the service scheduler without the CLI simply comment out everything in the main.go file from line 2-90 and uncomment from line 93-EOF.
+This Go implementation represents a service scheduler designed for an in-person customer service center. The implementation utilizes Cobra, a Go framework, to generate a Command-Line Interface (CLI) for customers to interact with the service scheduler. This idea was implemented to better simulate a real-world scenario where customers would have the ability to enter the necessary information (First name, last name and phone number) themselves. To utilize the service scheduler without the CLI, one can easily do so by commenting out lines 2-90 in the main.go file and uncommenting lines 93 onwards until the end of the file (EOF).
 
 ## Install Dependencies
 Navigate to the `Service_Scheduler` folder and install the necessary dependencies as needed using following commands: \
@@ -27,7 +27,7 @@ The implementation consists of two classes: `Customer` and `ServiceScheduler`.
 
 #### Customer Struct
 
-The `Customer` struct represents a customer with attributes such as first name, last name, phone number, and VIP status. It is used to store information about customers checking into the `ServiceScheduler`. Has three functions NewCustomer(), VIPCheck(), and ValidatePhoneNumber().
+The `Customer` struct represents details about a customer, including attributes such as first name, last name, phone number, and VIP status. The struct has three functions NewCustomer(), VIPCheck(), and ValidatePhoneNumber(), each contributing to the creation and validation of instances the `Customer` object.
 
 | Fields | Description |
 | --- | --- | 
@@ -38,7 +38,7 @@ The `Customer` struct represents a customer with attributes such as first name, 
 | `TicketNum` | A integer representing the ticket a customer receives once checked in.
 
 ### NewCustomer(string, string, string) returns (*Customer, error)
-The `NewCustomer` function takes in three strings provided in the parameter, validates them. It calls the VIPCheck() to determine whether a customer is a VIP or not. The TicketNum field is left to its default value until the newly created customer has checked in.
+The `NewCustomer` function accepts three strings provided in the parameters, validates thems, and then calls `VIPCheck()` to determine VIP status of the customer. The `TicketNum` field remains its default value until the newly created customer checks in.
   - If the input strings are valid, the function returns a pointer to a new `Customer` object initialized with the provided information and a nil error.
   - If the input strings are invalid, the function returns nil for the `Customer` object pointer along with an error describing the validation failure.
 
@@ -54,11 +54,11 @@ The `ValidatePhoneNumber` function takes in a string representing a 10 digit pho
 - returns false if it does not match the regex
 
 ### VIPCheck() returns (bool)
-The `VIPCheck` function simulates a database query that the `Service_Scheduler` would use to determine if a customer is a VIP. In a real-world scenario, customers would not have the ability to declare themselves as VIPs. Instead, their VIP status would be determined by querying a database or another external source.
+The `VIPCheck` function simulates a database query that the `Service_Scheduler` would use to determine if a customer is a VIP. In a real-world scenario, customers typically would not have the ability to declare their VIP status; rather, their VIP status would be determined by querying a database or another external source.
 - returns true or false at random
 
 #### ServiceScheduler Struct
-The `ServiceScheduler` struct represents a system for managing the order customers receive service in an in-person customer service center. It maintains queues for regular and VIP customers, along with a mutex lock for concurrent access control. Additionally, it includes a variable for the VIP processing rate which is vitable for the scheduler to maintain its intended processing rate ratio. Has two functions vital to its functionality, CheckIn() and GetNextCustomer()
+The `ServiceScheduler` struct represents a system designed to manage the order customers receive service in an in-person customer service center. It contains two queues for regular and VIP customers, a mutex lock for concurrent access control, a variable `vipRate` that determines the intended processing ratio between VIPs and regular customers and an integer that keeps count of the total number of customers checked in. The struct incorporates two  functions CheckIn() and GetNextCustomer().
 
 | Fields | Description |
 | --- | --- | 
@@ -72,16 +72,16 @@ The `ServiceScheduler` struct represents a system for managing the order custome
 ### Part 2: Implementation of CheckIn() and GetNextCustomer()
 ***
 ### CheckIn(*Customer)
-The `CheckIn` function of the `ServiceScheduler` struct manages the check-in process for customers in a thread-safe operation. It takes a pointer to a `Customer` object as a parameter and adds the customer to the appropriate queue based on their VIP status. Additionally, the function calculates and displays the estimated longest possible wait time (based on the modification done to the GetNextCustomer() for Part 3), and the ticket number for that specific customer. Additionally, the function increments the `totalCheckedIn` by one.
+The `CheckIn` function of the `ServiceScheduler` struct handles the check-in process for customers in a thread-safe way. It accepts a pointer to a `Customer` object as a parameter and adds the customer to the appropriate queue based on their VIP status. Additionally, the function calculates and displays the estimated longest possible wait time (based on the modification done to the GetNextCustomer() for Part 3) and assigns a sequential ticket number for that specific customer. Once the customer has been added the appropriate queue, `totalCheckedIn` is incremented by one.
 
 | Parameters | Description |
 | --- | ---| 
 | `customer` | A pointer to a `customer.Customer` object representing the customer to check in.
 
 ### GetNextCustomer() returns *Customer
-The `GetNextCustomer` function is a safe concurrent operation used to retrieve the next customer that is to be serviced. For Part 2, all VIP customers receive service ahead of regular customers, regardless of the order in which they enter the `ServiceScheduler`. However, in cases where a regular customer is currently being serviced and a VIP customer arrives, the regular customer is allowed to finish their service before the VIP customer is attended to.
-- returns a pointer to the `Customer` object that was found to be the next customer to be serviced.
+The `GetNextCustomer` function is a thread-safe operation designed to retrieve the next customer for service. In Part 2, priority is given to VIP customers, who are served before regular customers, no matter when they checked into the `ServiceScheduler`. However, in situations where a regular customer is already being served and a VIP customer arrives, the regular customer is allowed to complete their service before the VIP customer is attended to.
+- returns a pointer to the `Customer` object that was found to be the next customer to be served.
 
 ### Part 3: Modification of GetNextCustomer() returns *Customer
 ***
-The `GetNextCustomer` function was modified to maintain a 2:1 VIP to regular customer processing rate though still a thread-safe operation. Now instead of ALL VIP customers being serviced ahead of regular customers, for every two VIP customers are served, one regular customer has to be serviced if available.
+The `GetNextCustomer` function has been modified to ensure a 2:1 processing ratio between VIP and regular customers while maintaining thread safety. Rather than serving all VIP customers before regular ones, the modification ensures that for every two VIP customers served, one regular customer is served, if available.

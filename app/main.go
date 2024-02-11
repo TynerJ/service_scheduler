@@ -46,7 +46,7 @@ var runCmd = &cobra.Command{
 					if nextCustomer != nil {
 						fmt.Printf("Now serving customer: %d\n", nextCustomer.TicketNum)
 						// The amount of time it would take to complete serving a customer
-						// time.Sleep(time.Minute * serviceTime)
+						// time.Sleep(time.Minute * scheduler.ServiceTime)
 					} else {
 						fmt.Println("No customers to serve.")
 					}
@@ -120,7 +120,7 @@ var runCmd = &cobra.Command{
 // 	for i := 0; i < 9; i++ {
 // 		nextCustomer := scheduler.GetNextCustomer()
 // 		if nextCustomer != nil {
-// 			fmt.Printf("Serving customer: %s %s\n", nextCustomer.FirstName, nextCustomer.LastName)
+// 			fmt.Printf("Now serving customer: %d\n", nextCustomer.TicketNum)
 // 		} else {
 // 			fmt.Println("No customers to serve.")
 // 		}

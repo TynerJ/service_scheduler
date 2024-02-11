@@ -17,14 +17,13 @@ type ServiceScheduler struct {
 	totalCheckedIn int
 }
 
-// Initializers the ServiceScheduler with a predefined vipProcessingRate and returns a pointer to the object.
+// Initializes the ServiceScheduler with a predefined `vipProcessingRate` and returns a pointer to the object.
 func NewScheduler() *ServiceScheduler {
 	return &ServiceScheduler{vipRate: vipProcessingRate}
 }
 
-// Checks in a customer into the appropriate queue based on whether they are a VIP or not.
-// Provides a wait time based on a the longest approx time the customer could be waiting with
-// it taking `ServiceTime` minutes for a customer to be serviced.
+// Checks in a customer into the appropriate queue based on whether they are a VIP or not while
+// providing the longest time the customer could be waiting
 func (s *ServiceScheduler) CheckIn(customer *customer.Customer) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
@@ -54,7 +53,23 @@ func (s *ServiceScheduler) CheckIn(customer *customer.Customer) {
 	}
 }
 
-// Retrieves the next customer to be serviced while keeping a 2:1 VIP to regular customer rate
+// Part 2: Retrieves the next customer to be served where all VIP customers are served first
+// func (s *ServiceScheduler) GetNextCustomer() *customer.Customer {
+// 	s.lock.Lock()
+// 	defer s.lock.Unlock()
+// 	var customer *customer.Customer
+
+// 	if len(s.VipQueue) > 0 {
+// 		customer = s.VipQueue[0]
+// 		s.VipQueue = s.VipQueue[1:]
+// 	} else {
+// 		customer = s.RegularQueue[0]
+// 		s.RegularQueue = s.RegularQueue[1:]
+// 	}
+// 	return customer
+// }
+
+// Part 3: Retrieves the next customer to be served while maintaining a 2:1 VIP to regular customer rate
 func (s *ServiceScheduler) GetNextCustomer() *customer.Customer {
 	s.lock.Lock()
 	defer s.lock.Unlock()
@@ -74,19 +89,3 @@ func (s *ServiceScheduler) GetNextCustomer() *customer.Customer {
 	}
 	return customer
 }
-
-// Part 2: Retrieves the next customer to be serviced where all VIP customers are serviced first
-// func (s *ServiceScheduler) GetNextCustomer() *customer.Customer {
-// 	s.lock.Lock()
-// 	defer s.lock.Unlock()
-// 	var customer *customer.Customer
-
-// 	if len(s.VipQueue) > 0 {
-// 		customer = s.VipQueue[0]
-// 		s.VipQueue = s.VipQueue[1:]
-// 	} else {
-// 		customer = s.RegularQueue[0]
-// 		s.RegularQueue = s.RegularQueue[1:]
-// 	}
-// 	return customer
-// }

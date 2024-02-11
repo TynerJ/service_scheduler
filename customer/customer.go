@@ -31,7 +31,7 @@ func NewCustomer(firstName, lastName, number string) (*Customer, error) {
 	}
 }
 
-// Ensures that the string passed in through the parameter is in a valid format
+// Ensures that the string passed in through the parameter is in a valid format.
 func ValidatePhoneNumber(number string) bool {
 	regex := `^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$`
 
@@ -41,7 +41,7 @@ func ValidatePhoneNumber(number string) bool {
 	return re.MatchString(number)
 }
 
-// Function to simulate a database check to determine if a customer is a VIP or not.
+// Simulates a database check to determine whether a customer is a VIP.
 func VIPCheck() bool {
 	// Generate a random integer (0 or 1)
 	randomNumber := rand.Intn(2)
