@@ -7,7 +7,7 @@ import (
 )
 
 const vipProcessingRate = 2
-const serviceTime = 5
+const ServiceTime = 5
 
 type ServiceScheduler struct {
 	RegularQueue   []*customer.Customer
@@ -17,21 +17,20 @@ type ServiceScheduler struct {
 	totalCheckedIn int
 }
 
-// Creates a service scheduler
+// Initializers the ServiceScheduler with a predefined vipProcessingRate and returns a pointer to the object.
 func NewScheduler() *ServiceScheduler {
 	return &ServiceScheduler{vipRate: vipProcessingRate}
 }
 
 // Checks in a customer into the appropriate queue based on whether they are a VIP or not.
 // Provides a wait time based on a the longest approx time the customer could be waiting with
-// it taking 5 minutes for a customer to be serviced. It is possible to be seen prior to given
-// wait time but not later.
+// it taking `ServiceTime` minutes for a customer to be serviced.
 func (s *ServiceScheduler) CheckIn(customer *customer.Customer) {
 	s.lock.Lock()
 	defer s.lock.Unlock()
 
 	if customer.IsVIP {
-		waitTime := serviceTime*len(s.VipQueue) + (serviceTime * (len(s.VipQueue) / vipProcessingRate))
+		waitTime := ServiceTime*len(s.VipQueue) + (ServiceTime * (len(s.VipQueue) / vipProcessingRate))
 		s.VipQueue = append(s.VipQueue, customer)
 		s.totalCheckedIn++
 		customer.TicketNum = s.totalCheckedIn
@@ -43,7 +42,7 @@ func (s *ServiceScheduler) CheckIn(customer *customer.Customer) {
 		}
 
 	} else {
-		waitTime := serviceTime*len(s.RegularQueue) + (serviceTime * (len(s.RegularQueue) * 2))
+		waitTime := ServiceTime*len(s.RegularQueue) + (ServiceTime * (len(s.RegularQueue) * 2))
 		s.RegularQueue = append(s.RegularQueue, customer)
 		s.totalCheckedIn++
 		customer.TicketNum = s.totalCheckedIn

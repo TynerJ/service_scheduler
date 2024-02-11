@@ -3,17 +3,17 @@
 This Go implementation represents a service scheduler designed for an in-person customer service center. The implementation utilizes Cobra, a Go framework, to generate a Command-Line Interface (CLI) for customers to interact with the service scheduler. This idea was implemented to better smiulate a real-world scernario where customers would have the ability to enter the necessary information (First name, last name and phones) themselves. If one wishes to use the service scheduler without the CLI simply comment out everything in the main.go file from line 2-90 and uncomment from line 93-EOF.
 
 ## Install Dependencies
-Navigate to the service_scheduler folder and install the necessary dependencies as needed using following commands: \
+Navigate to the `Service_Scheduler` folder and install the necessary dependencies as needed using following commands: \
 ```go get github.com/stretchr/testify``` \
 ```go get github.com/spf13/cobra```
 
 ## Description
-The Service Scheduler collects customer-provided information, including first name, last name, and phone number, to facilitate check-ins. There are two tiers of customers: 
+The `Service_Scheduler` collects customer-provided information, including first name, last name, and phone number, to facilitate check-ins. There are two tiers of customers: 
 
 1. Regular customers
 2. VIP customers 
 
-The Service Scheduler maintains a 2:1 VIP to regular customer processing rate.
+The `Service_Scheduler` maintains a 2:1 VIP to regular customer processing rate.
 
 ## Usage
 Enter into /service_scheduler/app folder \
@@ -27,7 +27,7 @@ The implementation consists of two classes: `Customer` and `ServiceScheduler`.
 
 #### Customer Struct
 
-The `Customer` struct represents a customer with attributes such as first name, last name, phone number, and VIP status. It is used to store information about customers checking into the service scheduler. Has three functions NewCustomer(), VIPCheck(), and ValidatePhoneNumber().
+The `Customer` struct represents a customer with attributes such as first name, last name, phone number, and VIP status. It is used to store information about customers checking into the `ServiceScheduler`. Has three functions NewCustomer(), VIPCheck(), and ValidatePhoneNumber().
 
 | Fields | Description |
 | --- | --- | 
@@ -49,16 +49,16 @@ The `NewCustomer` function takes in three strings provided in the parameter, val
 | `number`   | A string representing the 10 digit phone number of the customer.
 
 ### ValidatePhoneNumber(string) returns bool
-The `ValidatePhoneNumber` function takes in a string representing a 10 digit phone number and compares it against an approved regular expression pattern.
+The `ValidatePhoneNumber` function takes in a string representing a 10 digit phone number and compares it against an approved regular expression pattern or regex. This regex allows for flexibility in the phone number's formatting by accepting various patterns, such as with or without parentheses around the first three digits, and allowing for dashes, dots, or spaces as separators between the groups of digits. 
 - returns true if it matches the regex 
 - returns false if it does not match the regex
 
 ### VIPCheck() returns (bool)
-The `VIPCheck` function simulates a database query that the `service_scheduler` would use to determine if a customer is a VIP. In a real-world scenario, customers would not have the ability to declare themselves as VIPs. Instead, their VIP status would be determined by querying a database or another external source.
+The `VIPCheck` function simulates a database query that the `Service_Scheduler` would use to determine if a customer is a VIP. In a real-world scenario, customers would not have the ability to declare themselves as VIPs. Instead, their VIP status would be determined by querying a database or another external source.
 - returns true or false at random
 
 #### ServiceScheduler Struct
-The `ServiceScheduler` struct represents a scheduler for managing the order of service for customers in an in-person customer service center. It maintains queues for regular and VIP customers, along with a mutex lock for concurrent access control. Additionally, it includes a variable for the VIP processing rate which is vitable for the scheduler to maintain its intended processing rate ratio. Has two functions vital to its functionality, CheckIn() and GetNextCustomer()
+The `ServiceScheduler` struct represents a system for managing the order customers receive service in an in-person customer service center. It maintains queues for regular and VIP customers, along with a mutex lock for concurrent access control. Additionally, it includes a variable for the VIP processing rate which is vitable for the scheduler to maintain its intended processing rate ratio. Has two functions vital to its functionality, CheckIn() and GetNextCustomer()
 
 | Fields | Description |
 | --- | --- | 
@@ -79,7 +79,7 @@ The `CheckIn` function of the `ServiceScheduler` struct manages the check-in pro
 | `customer` | A pointer to a `customer.Customer` object representing the customer to check in.
 
 ### GetNextCustomer() returns *Customer
-The `GetNextCustomer` function is a safe concurrent operation used to retrieve the next customer that is to be serviced. For Part 2, all VIP customers receive service ahead of regular customers, regardless of the order in which they enter the service scheduler. However, in cases where a regular customer is currently being serviced and a VIP customer arrives, the regular customer is allowed to finish their service before the VIP customer is attended to.
+The `GetNextCustomer` function is a safe concurrent operation used to retrieve the next customer that is to be serviced. For Part 2, all VIP customers receive service ahead of regular customers, regardless of the order in which they enter the `ServiceScheduler`. However, in cases where a regular customer is currently being serviced and a VIP customer arrives, the regular customer is allowed to finish their service before the VIP customer is attended to.
 - returns a pointer to the `Customer` object that was found to be the next customer to be serviced.
 
 ### Part 3: Modification of GetNextCustomer() returns *Customer

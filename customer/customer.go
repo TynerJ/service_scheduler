@@ -15,7 +15,7 @@ type Customer struct {
 	TicketNum   int
 }
 
-// Validates the given parameters and creates a new customer if they are all valid
+// Validates the given parameters and attempts to create a new Customer object
 func NewCustomer(firstName, lastName, number string) (*Customer, error) {
 	firstName = strings.ReplaceAll(firstName, " ", "")
 	lastName = strings.ReplaceAll(lastName, " ", "")
@@ -31,8 +31,8 @@ func NewCustomer(firstName, lastName, number string) (*Customer, error) {
 	}
 }
 
+// Ensures that the string passed in through the parameter is in a valid format
 func ValidatePhoneNumber(number string) bool {
-	//Allows for the first three digits to be enclosed in parenthesis
 	regex := `^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$`
 
 	re := regexp.MustCompile(regex)
@@ -41,7 +41,7 @@ func ValidatePhoneNumber(number string) bool {
 	return re.MatchString(number)
 }
 
-// Function to act as a database to check if a customer is a VIP or not.
+// Function to simulate a database check to determine if a customer is a VIP or not.
 func VIPCheck() bool {
 	// Generate a random integer (0 or 1)
 	randomNumber := rand.Intn(2)

@@ -17,7 +17,6 @@ var rootCmd = &cobra.Command{
 	Short: "The service scheduler",
 	Long:  `A CLI application for adding clients to the service scheduler.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// Display help message if no subcommand is provided
 		cmd.Help()
 	},
 }
@@ -30,7 +29,6 @@ func main() {
 }
 
 func init() {
-	// Initialize commands here
 	rootCmd.AddCommand(runCmd)
 }
 
@@ -47,7 +45,8 @@ var runCmd = &cobra.Command{
 					nextCustomer := s.GetNextCustomer()
 					if nextCustomer != nil {
 						fmt.Printf("Now serving customer: %d\n", nextCustomer.TicketNum)
-						//time.Sleep(time.Minute * serviceTime)
+						// The amount of time it would take to complete serving a customer
+						// time.Sleep(time.Minute * serviceTime)
 					} else {
 						fmt.Println("No customers to serve.")
 					}
@@ -89,7 +88,7 @@ var runCmd = &cobra.Command{
 	},
 }
 
-// Main.go function if one wishes to use the service_scheduler without the CLI
+// If one wishes to use the service_scheduler without the CLI comment out all prior code above and uncomment all code below
 // func main() {
 // 	scheduler := scheduler.NewScheduler()
 
