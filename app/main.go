@@ -117,7 +117,7 @@ var runCmd = &cobra.Command{
 // 	scheduler.CheckIn(customer0)
 
 // 	// Process customers
-// 	for i := 0; i < 9; i++ {
+// 	for i := 0; i < 10; i++ {
 // 		nextCustomer := scheduler.GetNextCustomer()
 // 		if nextCustomer != nil {
 // 			fmt.Printf("Now serving customer: %d\n", nextCustomer.TicketNum)
